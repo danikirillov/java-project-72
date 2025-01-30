@@ -19,7 +19,7 @@ jobs:
           distribution: 'temurin'
       - uses: gradle/gradle-build-action@v3
         with:
-          gradle-version: 8.8
+          gradle-version: 8.12
       - run: echo ${{github.workspace}}
       - run: make build
       - name: Publish code coverage
