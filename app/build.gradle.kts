@@ -5,6 +5,7 @@ plugins {
     application
     jacoco
 //    id("checkstyle")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "hexlet.code"
