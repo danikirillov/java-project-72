@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @ToString
 public final class Url {
 
-    private Long id;
+    private Integer id;
 
     @ToString.Include
     private String name;
