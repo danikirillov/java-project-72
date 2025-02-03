@@ -1,5 +1,8 @@
+@import hexlet.code.util.NamedRoutes
+@import hexlet.code.dto.BasePage
 @import gg.jte.Content
 @param Content content
+@param BasePage page = null
 
 <!doctype html>
 <html lang="en">
@@ -11,8 +14,11 @@
 </head>
 <body>
 <h1>
-    <a href="/">Home</a>
+    <a href=${NamedRoutes.homePath()}>Home</a>
 </h1>
+@if(page != null && page.getFlash() != null)
+    <p>${page.getFlash()}</p>
+@endif
 ${content}
 <div class="footer">
     <p>ho ho ho</p>

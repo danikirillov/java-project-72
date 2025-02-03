@@ -6,6 +6,7 @@ import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import gg.jte.resolve.ResourceCodeResolver;
 import hexlet.code.dao.BaseRepository;
+import hexlet.code.util.NamedRoutes;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import lombok.extern.slf4j.Slf4j;
@@ -38,8 +39,8 @@ public class App {
             config.fileRenderer(new JavalinJte(createTemplateEngine()));
         });
 
-        app.get("/",
-               ctx -> ctx.render("index.jte"));
+        app.get(NamedRoutes.homePath(), ctx -> ctx.render("index.jte"));
+        app.post(NamedRoutes.urlsPath(), UrlController::create);
 
         return app;
     }
