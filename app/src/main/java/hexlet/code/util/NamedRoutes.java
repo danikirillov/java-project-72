@@ -11,4 +11,12 @@ public final class NamedRoutes {
     public static String urlsPath() {
         return "/urls";
     }
+
+    public static String urlsPath(Integer id) {
+        return urlsPath(String.valueOf(id));
+    }
+
+    public static String urlsPath(String id) {
+        return "/urls/".concat(id);
+    }
 }
