@@ -24,7 +24,7 @@ public class AppTest {
     public void testMainPage() {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/");
-            assertEquals(response.code(), 200);
+            assertEquals(200, response.code());
             assertNotNull(response.body());
             assertNotNull(response.body().string());
             assertTrue(response.body().string().contains("/urls"));
@@ -36,7 +36,7 @@ public class AppTest {
     public void testUrlsPage() {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls");
-            assertEquals(response.code(), 200);
+            assertEquals(200, response.code());
             assertTrue(response.body().string().contains("Урлов нет"));
         });
     }
@@ -82,7 +82,7 @@ public class AppTest {
     void testUrlNotFound() {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/-1");
-            assertEquals(response.code(), 404);
+            assertEquals(404,response.code());
         });
     }
 }

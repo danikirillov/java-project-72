@@ -42,8 +42,8 @@ public class App {
 
         app.get(NamedRoutes.homePath(), ctx -> ctx.render("index.jte"));
         app.post(NamedRoutes.urlsPath(), UrlController::create);
-        app.get(NamedRoutes.urlsPath(), UrlController::show);
-        app.get(NamedRoutes.urlsPath("{id}"), UrlController::index);
+        app.get(NamedRoutes.urlsPath(), UrlController::index);
+        app.get(NamedRoutes.urlsPath("{id}"), UrlController::show);
 
         return app;
     }
