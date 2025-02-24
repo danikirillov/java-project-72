@@ -14,7 +14,7 @@
 </head>
 <body>
 <h1>
-    <a href=${NamedRoutes.homePath()}>Home</a>
+    <a href="${NamedRoutes.homePath()}">Home</a>
 </h1>
 @if(page != null && page.getFlash() != null)
     <p>${page.getFlash()}</p>
