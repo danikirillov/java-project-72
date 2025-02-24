@@ -15,26 +15,31 @@ import java.sql.SQLException;
 import static io.javalin.rendering.template.TemplateUtil.model;
 
 public final class UrlController {
-    public static void create(Context ctx) {
+    public static void create(Context ctx) throws SQLException {
         final var flash = "flash";
-        var url = ctx.formParam("url");
-
         try {
-            var parsedUrl = URI.create(url).toURL();
-            var domain = parsedUrl.getHost() + ":" +parsedUrl.getPort();
-            var user = new Url(domain);
-            UrlRepository.save(user);
-            ctx.sessionAttribute(flash, "Страница успешно добавлена");
+            var urlParam = ctx.formParam("url");
+            var parsedUrl = URI.create(urlParam).toURL();
+
+            var domain = 
+                String.format("%s://%s", parsedUrl.getProtocol(), parsedUrl.getAuthority())
+                      .toLowerCase();
+            
+            var urlFromDb = UrlRepository.findByName(domain);
+            if (urlFromDb.isEmpty()) {
+                var url = new Url(domain);
+                UrlRepository.save(url);
+                ctx.sessionAttribute(flash, "Страница успешно добавлена");
+            } else {
+                ctx.sessionAttribute(flash, "Страница уже существует");
+            }
         }
         catch (MalformedURLException e) {
             ctx.sessionAttribute(flash, "Некорректный URL");
         }
-        catch (SQLException e) {
-            ctx.sessionAttribute(flash, "Страница уже существует");
-        }
-        
+
         var page = new BasePage();
-        page.setFlash(ctx.consumeSessionAttribute("flash"));
+        page.setFlash(ctx.consumeSessionAttribute(flash));
         ctx.render("/index.jte", model("page", page));
     }
 
@@ -47,7 +52,7 @@ public final class UrlController {
     public static void show(Context ctx) throws SQLException {
         var id = ctx.pathParamAsClass("id", Integer.class).get();
         var url = UrlRepository.find(id)
-                               .orElseThrow(() -> new NotFoundResponse("Url entity with id = " + id + " not found"));
+                               .orElseThrow(() -> new NotFoundResponse("Урл с айди " + id + " не найден."));
         var page = new UrlPage(url);
         ctx.render("urls/show.jte", model("page", page));
     }

@@ -7,7 +7,7 @@ page = page,
 content = @`
     <h1>Urls List</h1>
     @if(page.getUrls().isEmpty())
-        <p>No urls to show</p>
+        <p>Урлов нет</p>
     @else
         @for(var url : page.getUrls())
             <div>
