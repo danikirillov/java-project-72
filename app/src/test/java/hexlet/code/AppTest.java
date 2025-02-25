@@ -44,9 +44,9 @@ public class AppTest {
     @Test
     public void testCreateUrl() {
         JavalinTest.test(app, (server, client) -> {
-            var requestBody = "name=http://localhost:8080/hello";
+            var requestBody = "url=http://localhost:8080/hello";
             var response = client.post("/urls", requestBody);
-            assertEquals(response.code(), 200);
+            assertEquals(200, response.code());
             assertTrue(response.body().string().contains("Страница успешно добавлена"));
             var urlInDb = UrlRepository.findByName("http://localhost:8080");
             assertFalse(urlInDb.isEmpty());
@@ -56,9 +56,9 @@ public class AppTest {
     @Test
     public void testCreateUrlUnsuccessful() {
         JavalinTest.test(app, (server, client) -> {
-            var requestBody = "name=lhost:8080/hello";
+            var requestBody = "url=lhost:8080/hello";
             var response = client.post("/urls", requestBody);
-            assertEquals(response.code(), 200);
+            assertEquals(200, response.code());
             assertTrue(response.body().string().contains("Некорректный URL"));
             var urlInDb = UrlRepository.findByName("lhost:8080");
             assertTrue(urlInDb.isEmpty());
