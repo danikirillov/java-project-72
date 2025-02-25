@@ -4,7 +4,7 @@
 content = @`
     <div> Hallo mein Freund
     </div>
-    <form action=${NamedRoutes.urlsPath()}>
+    <form action="${NamedRoutes.urlsPath()}" method="post">
         <label>
             Url
             <input type="search" name="url" />
