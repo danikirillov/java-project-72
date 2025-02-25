@@ -5,10 +5,11 @@ import hexlet.code.dto.BasePage;
 import hexlet.code.dto.UrlPage;
 import hexlet.code.dto.UrlsPage;
 import hexlet.code.model.Url;
+import hexlet.code.util.NamedRoutes;
 import io.javalin.http.Context;
+import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.sql.SQLException;
 
@@ -34,13 +35,10 @@ public final class UrlController {
                 ctx.sessionAttribute(flash, "Страница уже существует");
             }
         }
-        catch (MalformedURLException e) {
+        catch (Exception e) {
             ctx.sessionAttribute(flash, "Некорректный URL");
         }
-
-        var page = new BasePage();
-        page.setFlash(ctx.consumeSessionAttribute(flash));
-        ctx.render("/index.jte", model("page", page));
+        ctx.redirect(NamedRoutes.homePath(), HttpStatus.forStatus(302));
     }
 
     public static void index(Context ctx) throws SQLException {
