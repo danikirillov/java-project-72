@@ -1,7 +1,6 @@
 package hexlet.code.controller;
 
 import hexlet.code.dao.UrlRepository;
-import hexlet.code.dto.BasePage;
 import hexlet.code.dto.UrlPage;
 import hexlet.code.dto.UrlsPage;
 import hexlet.code.model.Url;
@@ -16,8 +15,10 @@ import java.sql.SQLException;
 import static io.javalin.rendering.template.TemplateUtil.model;
 
 public final class UrlController {
-    public static void create(Context ctx) throws SQLException {
-        final var flash = "flash";
+    public static final String FLASH_TYPE = "flashType";
+    public static final String FLASH = "flash";
+
+    public static void create(Context ctx) {
         try {
             var urlParam = ctx.formParam("url");
             var parsedUrl = URI.create(urlParam).toURL();
@@ -30,20 +31,26 @@ public final class UrlController {
             if (urlFromDb.isEmpty()) {
                 var url = new Url(domain);
                 UrlRepository.save(url);
-                ctx.sessionAttribute(flash, "Страница успешно добавлена");
+                ctx.sessionAttribute(FLASH, "Страница успешно добавлена");
+                ctx.sessionAttribute(FLASH_TYPE, "alert-success");
             } else {
-                ctx.sessionAttribute(flash, "Страница уже существует");
+                ctx.sessionAttribute(FLASH, "Страница уже существует");
+                ctx.sessionAttribute(FLASH_TYPE, "alert-warning");
             }
+            ctx.redirect(NamedRoutes.urlsPath(), HttpStatus.forStatus(302));
         }
         catch (Exception e) {
-            ctx.sessionAttribute(flash, "Некорректный URL");
+            ctx.sessionAttribute(FLASH, "Некорректный URL");
+            ctx.sessionAttribute(FLASH_TYPE, "alert-danger");
+            ctx.redirect(NamedRoutes.homePath());
         }
-        ctx.redirect(NamedRoutes.homePath(), HttpStatus.forStatus(302));
     }
 
     public static void index(Context ctx) throws SQLException {
         var urls = UrlRepository.getEntities();
         var page = new UrlsPage(urls);
+        page.setFlash(ctx.consumeSessionAttribute(FLASH));
+        page.setFlashType(ctx.consumeSessionAttribute(FLASH_TYPE));
         ctx.render("urls/index.jte", model("page", page));
     }
 

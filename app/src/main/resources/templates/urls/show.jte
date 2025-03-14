@@ -4,6 +4,8 @@
 @template.layout.page(
 page = page,
 content = @`
-    <h1>${page.getUrl().getName()}</h1>
+    <div class="container py-5">
+        <h1 class="text-center">${page.getUrl().getName()}</h1>
+    </div>
 `
 )
