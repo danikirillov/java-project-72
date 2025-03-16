@@ -19,10 +19,10 @@
 <header class="bg-light py-3">
     <div class="container d-flex justify-content-start">
         <h1 class="me-4">
-            <a class="text-decoration-none" href="${NamedRoutes.homePath()}">Home</a>
+            <a class="text-decoration-none" href="${NamedRoutes.homePath()}">На главную</a>
         </h1>
         <h1>
-            <a class="text-decoration-none" href="${NamedRoutes.urlsPath()}">Urls</a>
+            <a class="text-decoration-none" href="${NamedRoutes.urlsPath()}">Урлы</a>
         </h1>
     </div>
 </header>

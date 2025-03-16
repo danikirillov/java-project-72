@@ -14,17 +14,17 @@ public class UrlRepository extends BaseRepository {
     public static void save(Url url) throws SQLException {
         String sql = "INSERT INTO urls (name, created_at) VALUES (?, ?)";
         try (var conn = dataSource.getConnection();
-             var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+             var statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
-            preparedStatement.setString(1, url.getName());
-            preparedStatement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-            preparedStatement.executeUpdate();
-            var generatedKeys = preparedStatement.getGeneratedKeys();
+            statement.setString(1, url.getName());
+            statement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            statement.executeUpdate();
 
+            var generatedKeys = statement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 url.setId(generatedKeys.getInt(1));
             } else {
-                throw new SQLException("DB have not returned an id after saving an entity");
+                throw new SQLException("DB have not returned an id after saving the entity");
             }
         }
     }
@@ -32,9 +32,9 @@ public class UrlRepository extends BaseRepository {
     public static Optional<Url> find(Integer id) throws SQLException {
         var sql = "SELECT * FROM urls WHERE id = ?";
         try (var conn = dataSource.getConnection();
-             var stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            var resultSet = stmt.executeQuery();
+             var statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            var resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 var name = resultSet.getString("name");
                 var createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();
@@ -47,12 +47,13 @@ public class UrlRepository extends BaseRepository {
             return Optional.empty();
         }
     }
+
     public static Optional<Url> findByName(String name) throws SQLException {
         var sql = "SELECT * FROM urls WHERE name = ?";
         try (var conn = dataSource.getConnection();
-             var stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, name);
-            var resultSet = stmt.executeQuery();
+             var statement = conn.prepareStatement(sql)) {
+            statement.setString(1, name);
+            var resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 var createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();;
                 var id = resultSet.getInt("id");
@@ -70,8 +71,8 @@ public class UrlRepository extends BaseRepository {
     public static List<Url> getEntities() throws SQLException {
         var sql = "SELECT * FROM urls";
         try (var conn = dataSource.getConnection();
-             var stmt = conn.prepareStatement(sql)) {
-            var resultSet = stmt.executeQuery();
+             var statement = conn.prepareStatement(sql)) {
+            var resultSet = statement.executeQuery();
             var result = new ArrayList<Url>();
             while (resultSet.next()) {
                 var id = resultSet.getInt("id");

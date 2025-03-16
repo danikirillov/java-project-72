@@ -7,7 +7,7 @@ public final class NamedRoutes {
     public static String homePath() {
         return "/";
     }
-    
+
     public static String urlsPath() {
         return "/urls";
     }
@@ -17,6 +17,14 @@ public final class NamedRoutes {
     }
 
     public static String urlsPath(String id) {
-        return "/urls/".concat(id);
+        return urlsPath() + "/" + id;
+    }
+
+    public static String urlsCheckPath(Integer id) {
+        return urlsCheckPath(String.valueOf(id));
+    }
+
+    public static String urlsCheckPath(String id) {
+        return urlsPath(id).concat("/checks");
     }
 }

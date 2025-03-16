@@ -10,10 +10,10 @@ content = @`
         <h2>Hallo mein Freund</h2>
         <form action="${NamedRoutes.urlsPath()}" method="post" class="mt-3">
             <div class="mb-3">
-                <label for="urlInput" class="form-label">Url</label>
-                <input type="search" name="url" id="urlInput" class="form-control" placeholder="Enter URL"/>
+                <label for="urlInput" class="form-label">Урл</label>
+                <input type="search" name="url" id="urlInput" class="form-control" placeholder="Введи урл"/>
             </div>
-            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="submit" class="btn btn-primary">Добавить</button>
         </form>
     </div>
 `

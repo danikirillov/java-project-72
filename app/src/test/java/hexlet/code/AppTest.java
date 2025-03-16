@@ -1,23 +1,49 @@
 package hexlet.code;
 
+import hexlet.code.dao.UrlCheckRepository;
 import hexlet.code.dao.UrlRepository;
 import hexlet.code.model.Url;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AppTest {
     Javalin app;
+    static MockWebServer mockServer;
 
     @BeforeEach
     final void setUp() throws SQLException, IOException {
         app = App.getApp();
+    }
+
+    @BeforeAll
+     static void beforeAll() throws IOException {
+        var heyCom = readFixture("heycom.html");
+        mockServer = new MockWebServer();
+        var mockedResponse = new MockResponse().setBody(heyCom);
+        mockServer.enqueue(mockedResponse);
+        mockServer.start();
+    }
+
+    @AfterAll
+     static void afterAll() throws IOException {
+        mockServer.shutdown();
     }
 
     @Test
@@ -84,4 +110,34 @@ class AppTest {
             assertEquals(404, response.code());
         });
     }
+
+    private static Path getFixturePath(String fileName) {
+        return Paths
+            .get("src", "test", "resources", "fixtures", fileName)
+            .toAbsolutePath()
+            .normalize();
+    }
+
+    private static String readFixture(String fileName) throws IOException {
+        var fixturePath = getFixturePath(fileName);
+        return Files.readString(fixturePath).trim();
+    }
+
+    @Test
+    void testCheck() {
+        JavalinTest.test(app, (server, client) -> {
+            var testUrl = new Url(mockServer.url("/test").toString());
+            UrlRepository.save(testUrl);
+
+            client.post("/urls/1/checks");
+            var actualCheckUrl = UrlCheckRepository.findAllByUrlId(testUrl.getId()).getFirst();
+
+            assertNotNull(actualCheckUrl);
+            assertEquals(200, actualCheckUrl.getStatusCode());
+            assertEquals("Test title", actualCheckUrl.getTitle());
+            assertEquals("test h1", actualCheckUrl.getH1());
+            assertEquals("test description", actualCheckUrl.getDescription());
+        });
+    }
+
 }
