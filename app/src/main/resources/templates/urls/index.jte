@@ -17,13 +17,16 @@ content = @`
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 @for(var url : page.getUrls())
                     <div class="col">
-                        <div class="card h-100 shadow-sm hover-shadow">
+                        <div class="card h-100 w-75 shadow-sm hover-shadow">
                             <div class="card-body">
                                 <h2 class="card-title h5 mb-3">
                                     <a href="${NamedRoutes.urlsPath(url.id())}" class="text-decoration-none stretched-link">${url.name()}</a>
                                 </h2>
                                 <p class="card-text text-muted small">
                                     <i class="bi bi-clock"></i> Проверен: ${url.lastCheck().map(date -> date.format(dateTime)).orElse("не проверен")}
+                                </p>
+                                <p class="card-text text-muted small">
+                                    <i class="bi bi-clock"></i> айди: ${url.id()}
                                 </p>
                             </div>
                         </div>
