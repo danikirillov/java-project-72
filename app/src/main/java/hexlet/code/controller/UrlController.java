@@ -58,8 +58,8 @@ public final class UrlController {
         var urls = UrlRepository.getEntities();
         var urlsWithLastCheck = new ArrayList<UrlWithLastCheck>();
         for (var url : urls ) {
-            var lastCheckDate = UrlCheckRepository.findLastCheckDate(url.getId());
-            urlsWithLastCheck.add(new UrlWithLastCheck(url.getId(), url.getName(), lastCheckDate));
+            var lastCheck = UrlCheckRepository.findLastCheck(url.getId());
+            urlsWithLastCheck.add(new UrlWithLastCheck(url.getId(), url.getName(), lastCheck));
         }
 
         var page = new UrlsPage(urlsWithLastCheck);
@@ -74,6 +74,8 @@ public final class UrlController {
             .orElseThrow(() -> new NotFoundResponse("Урл с айди " + id + " не найден."));
         var checks = UrlCheckRepository.findAllByUrlId(id);
         var page = new UrlPage(url, checks);
+        page.setFlash(ctx.consumeSessionAttribute(FLASH));
+        page.setFlashType(ctx.consumeSessionAttribute(FLASH_TYPE));
         ctx.render("urls/show.jte", model("page", page));
     }
 

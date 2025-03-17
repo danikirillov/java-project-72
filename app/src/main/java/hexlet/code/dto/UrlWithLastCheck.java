@@ -1,7 +1,8 @@
 package hexlet.code.dto;
 
-import java.time.LocalDateTime;
+import hexlet.code.model.UrlCheck;
+
 import java.util.Optional;
 
-public record UrlWithLastCheck(Integer id, String name, Optional<LocalDateTime> lastCheck) {
+public record UrlWithLastCheck(Integer id, String name, Optional<UrlCheck> lastCheck) {
 }

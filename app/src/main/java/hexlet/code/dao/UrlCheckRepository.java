@@ -58,7 +58,7 @@ public class UrlCheckRepository extends BaseRepository {
         }
     }
 
-    public static Optional<LocalDateTime> findLastCheckDate(Integer urlId) throws SQLException {
+    public static Optional<UrlCheck> findLastCheck(Integer urlId) throws SQLException {
         var sql = "SELECT * FROM url_checks WHERE url_id = ? ORDER BY created_at DESC LIMIT 1";
         try (var conn = dataSource.getConnection();
              var statement = conn.prepareStatement(sql)) {
@@ -66,7 +66,15 @@ public class UrlCheckRepository extends BaseRepository {
             var resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                return Optional.of(resultSet.getTimestamp("created_at").toLocalDateTime());
+                var check = new UrlCheck(
+                    resultSet.getInt("status_code"),
+                    resultSet.getString("title"),
+                    resultSet.getString("h1"),
+                    resultSet.getString("description"),
+                    urlId
+                );
+                check.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
+                return Optional.of(check);
             }
             return Optional.empty();
         }
