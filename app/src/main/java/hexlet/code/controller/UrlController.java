@@ -57,7 +57,7 @@ public final class UrlController {
     public static void index(Context ctx) throws SQLException {
         var urls = UrlRepository.getEntities();
         var urlsWithLastCheck = new ArrayList<UrlWithLastCheck>();
-        for (var url : urls ) {
+        for (var url : urls) {
             var lastCheck = UrlCheckRepository.findLastCheck(url.getId());
             urlsWithLastCheck.add(new UrlWithLastCheck(url.getId(), url.getName(), lastCheck));
         }

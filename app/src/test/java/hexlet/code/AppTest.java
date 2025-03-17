@@ -33,7 +33,7 @@ class AppTest {
     }
 
     @BeforeAll
-     static void beforeAll() throws IOException {
+    static void beforeAll() throws IOException {
         var heyCom = readFixture("heycom.html");
         mockServer = new MockWebServer();
         var mockedResponse = new MockResponse().setBody(heyCom);
@@ -42,7 +42,7 @@ class AppTest {
     }
 
     @AfterAll
-     static void afterAll() throws IOException {
+    static void afterAll() throws IOException {
         mockServer.shutdown();
     }
 

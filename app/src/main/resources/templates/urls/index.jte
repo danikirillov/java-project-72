@@ -21,17 +21,18 @@ content = @`
                         <div class="card h-100 shadow-sm hover-shadow">
                             <div class="card-body">
                                 <h2 class="card-title h5 mb-3">
-                                    <a href="${NamedRoutes.urlsPath(url.id())}" class="text-decoration-none stretched-link">${url.name()}</a>
+                                    <a href="${NamedRoutes.urlsPath(url.id())}"
+                                       class="text-decoration-none stretched-link">${url.name()}</a>
                                 </h2>
                                 <p class="card-text text-muted small">
                                     <i class="bi bi-clock"></i> Aйди: ${url.id()}
                                 </p>
-                                @if(url.lastCheck().isPresent()) 
-                                <p class="card-text text-muted small">
-                                    <i class="bi bi-clock"></i> 
-                                    Проверен: ${url.lastCheck().map(UrlCheck::getCreatedAt).map(date -> date.format(dateTime)).orElse("не проверен")}
-                                    Код: ${url.lastCheck().map(UrlCheck::getStatusCode).map(String::valueOf).orElse("не проверен")}
-                                </p>
+                                @if(url.lastCheck().isPresent())
+                                    <p class="card-text text-muted small">
+                                        <i class="bi bi-clock"></i>
+                                        Проверен: ${url.lastCheck().map(UrlCheck::getCreatedAt).map(date -> date.format(dateTime)).orElse("не проверен")}
+                                        Код: ${url.lastCheck().map(UrlCheck::getStatusCode).map(String::valueOf).orElse("не проверен")}
+                                    </p>
                                 @endif
                             </div>
                         </div>

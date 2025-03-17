@@ -55,9 +55,9 @@ public class UrlRepository extends BaseRepository {
             statement.setString(1, name);
             var resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                var createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();;
+                var createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();
                 var id = resultSet.getInt("id");
-                
+
                 var url = new Url(name);
                 url.setId(id);
                 url.setCreatedAt(createdAt);
