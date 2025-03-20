@@ -129,7 +129,7 @@ class AppTest {
             var testUrl = new Url(mockServer.url("/test").toString());
             UrlRepository.save(testUrl);
 
-            client.post("/urls/1/checks");
+            client.post(String.format("/urls/%d/checks", testUrl.getId()));
             var actualCheckUrl = UrlCheckRepository.findAllByUrlId(testUrl.getId()).getFirst();
 
             assertNotNull(actualCheckUrl);

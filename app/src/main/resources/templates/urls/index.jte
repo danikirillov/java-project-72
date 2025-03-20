@@ -27,11 +27,11 @@ content = @`
                                 <p class="card-text text-muted small">
                                     <i class="bi bi-clock"></i> Aйди: ${url.id()}
                                 </p>
-                                @if(url.lastCheck().isPresent())
+                                @if(url.lastCheck() != null)
                                     <p class="card-text text-muted small">
                                         <i class="bi bi-clock"></i>
-                                        Проверен: ${url.lastCheck().map(UrlCheck::getCreatedAt).map(date -> date.format(dateTime)).orElse("не проверен")}
-                                        Код: ${url.lastCheck().map(UrlCheck::getStatusCode).map(String::valueOf).orElse("не проверен")}
+                                        Проверен: ${url.lastCheck().getCreatedAt().format(dateTime)}
+                                        Код: ${url.lastCheck().getStatusCode()}
                                     </p>
                                 @endif
                             </div>

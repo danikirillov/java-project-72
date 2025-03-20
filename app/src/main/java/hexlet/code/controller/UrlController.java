@@ -57,8 +57,9 @@ public final class UrlController {
     public static void index(Context ctx) throws SQLException {
         var urls = UrlRepository.getEntities();
         var urlsWithLastCheck = new ArrayList<UrlWithLastCheck>();
+        var urlIdToLatestCheck = UrlCheckRepository.findLastCheck();
         for (var url : urls) {
-            var lastCheck = UrlCheckRepository.findLastCheck(url.getId());
+            var lastCheck = urlIdToLatestCheck.get(url.getId());
             urlsWithLastCheck.add(new UrlWithLastCheck(url.getId(), url.getName(), lastCheck));
         }
 
@@ -98,7 +99,8 @@ public final class UrlController {
             ctx.sessionAttribute(FLASH, "Страница успешно проверена");
             ctx.sessionAttribute(FLASH_TYPE, "alert-success");
         } catch (Exception e) {
-            ctx.sessionAttribute(FLASH, e.getMessage());
+            e.printStackTrace();
+            ctx.sessionAttribute(FLASH, "При проверке сайта произошла ошибка. Возможно сайт не доступен.");
             ctx.sessionAttribute(FLASH_TYPE, "alert-danger");
         }
 

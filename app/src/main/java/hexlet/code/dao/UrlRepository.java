@@ -16,13 +16,15 @@ public class UrlRepository extends BaseRepository {
         try (var conn = dataSource.getConnection();
              var statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
+            var createdAt = LocalDateTime.now();
             statement.setString(1, url.getName());
-            statement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            statement.setTimestamp(2, Timestamp.valueOf(createdAt));
             statement.executeUpdate();
 
             var generatedKeys = statement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 url.setId(generatedKeys.getInt(1));
+                url.setCreatedAt(createdAt);
             } else {
                 throw new SQLException("DB have not returned an id after saving the entity");
             }
@@ -79,10 +81,10 @@ public class UrlRepository extends BaseRepository {
                 var name = resultSet.getString("name");
                 var createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();
 
-                var car = new Url(name);
-                car.setId(id);
-                car.setCreatedAt(createdAt);
-                result.add(car);
+                var url = new Url(name);
+                url.setId(id);
+                url.setCreatedAt(createdAt);
+                result.add(url);
             }
             return result;
         }
