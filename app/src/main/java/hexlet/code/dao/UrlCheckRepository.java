@@ -65,7 +65,7 @@ public class UrlCheckRepository extends BaseRepository {
         var sql = """
          SELECT DISTINCT ON (url_id) *
          FROM url_checks
-         ORDER BY created_at DESC""";
+         ORDER BY url_id, created_at DESC""";
         try (var conn = dataSource.getConnection();
              var statement = conn.prepareStatement(sql)) {
             var resultSet = statement.executeQuery();
